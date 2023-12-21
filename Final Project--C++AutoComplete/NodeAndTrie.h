@@ -29,6 +29,8 @@ public:
 	//功能模块化思想:单独设计一个判断是否有所需子节点的函数
 	void markEnd();
 	//为了insert标记结尾节点而设计
+	void layerClassify();
+	//根据layer值对node进行分组
 
 };
 
@@ -45,6 +47,14 @@ public:
 	void layerSearch(string keyword);
 	void deepSearch(string keyword);
 
+	
+
 	trie();
 
 };
+
+using layerGroup = vector<node*>;
+using groupCatalog = map<int, layerGroup>;
+using catalogEle = pair<int, layerGroup>;
+
+groupCatalog enCatalog;
