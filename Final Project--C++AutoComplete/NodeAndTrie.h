@@ -37,17 +37,16 @@ public:
 class trie {
 private:
 	node root;
-	int maxLayer;
 	int count;//´Ê»ãÊý
 public:
 	int insert(string wordIn);
 	void remove(string Deleted);
+	static int maxLayer;
 
-	void baseSearch(string keyword,node* rootIn);
-	void layerSearch(string keyword);
-	void deepSearch(string keyword);
-
-	
+	node* baseSearch(string keyword,node* rootIn);
+	void layerSearch(string keyword,int layerIn);
+	node* deepSearch(string keyword);
+	string readResult(node* edge);
 
 	trie();
 
@@ -57,4 +56,8 @@ using layerGroup = vector<node*>;
 using groupCatalog = map<int, layerGroup>;
 using catalogEle = pair<int, layerGroup>;
 
+vector<string> searchResult;
+
 groupCatalog enCatalog;
+
+void showResult();
