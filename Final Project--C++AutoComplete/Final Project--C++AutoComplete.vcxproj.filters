@@ -15,15 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\Autocomplete-master\autocomplete_bt.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Autocomplete-master\autocomplete_tr.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="示例代码.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="Main Structure.cpp">
       <Filter>源文件</Filter>
     </ClCompile>

@@ -127,12 +127,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\Autocomplete-master\autocomplete_bt.cpp" />
-    <ClCompile Include="..\Autocomplete-master\autocomplete_tr.cpp" />
     <ClCompile Include="Main Structure.cpp" />
     <ClCompile Include="Node.cpp" />
     <ClCompile Include="Trie.cpp" />
-    <ClCompile Include="示例代码.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="History.h" />
