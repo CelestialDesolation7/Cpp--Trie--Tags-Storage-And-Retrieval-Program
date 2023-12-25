@@ -8,7 +8,7 @@
 #include <string>
 #include <fstream>
 
-using namespace std;
+
 
 int main(){
 	cout << "Copyleft (c) megahard 2023" << endl << "All left reserved.\n";
@@ -23,4 +23,7 @@ int main(){
 	cout << "请稍等,正在构建字典" << endl;
 	readDictionary(dictionary, mainTrie);
 	cout << "字典构建完成,请输入您要搜索的内容.";
+	dictionary.close();
+	ofstream dictionaryTemp("dictionary.txt");
+
 }

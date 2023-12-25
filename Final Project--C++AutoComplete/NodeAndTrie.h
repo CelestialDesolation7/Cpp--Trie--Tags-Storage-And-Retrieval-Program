@@ -54,13 +54,28 @@ public:
 
 };
 
+/////////////////////////////////////////////////////
+//类型别名///////////////////////////////////////////
+/////////////////////////////////////////////////////
+
 using layerGroup = vector<node*>;
 using groupCatalog = map<int, layerGroup>;
 using catalogEle = pair<int, layerGroup>;
+using changeUnit = pair<string, string>;
+
+////////////////////////////////////////////////////////
+//全局容器//////////////////////////////////////////////
+////////////////////////////////////////////////////////
 
 vector<string> searchResult;
 map<string, string>tagAndTrans;
 groupCatalog enCatalog;
+vector<string> favoriateList;
+vector<changeUnit> changeRecord;
+
+/////////////////////////////////////////////////
+//数据展示函数///////////////////////////////////
+/////////////////////////////////////////////////
 
 void showResult();
 void addToFavoriate(string keyword);
@@ -69,14 +84,15 @@ void clearFavoriate();
 void showFavoriate();
 int resMinimumSeqNumber = 1;
 int resMaximumSeqNumber = 0;
+string showTrans(string tag);
+
+///////////////////////////////////////////////////////
+//字典读取与修改函数///////////////////////////////////
+///////////////////////////////////////////////////////
 
 void readDictionary(ifstream& dictionary,trie trie);
 bool addWord(string fullWork);
-void userAddWord(string fullWord);
+void userAddWord(string fullWord,trie trie);
 bool deleteWord(string toDelete);
-void userDeleteWord(string toDelete);
-
-bool findTrans(string tag);
-void showTrans(string tag);
-
-vector<string> favoriateList;
+void userDeleteWord(string toDelete,trie trie);
+void saveChange();

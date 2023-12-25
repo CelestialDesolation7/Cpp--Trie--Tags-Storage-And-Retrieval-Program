@@ -129,6 +129,7 @@ void trie::userRemove(string keyword)
 	else cout << "没有在词库中找到标签 " << keyword << " 请检查您的输入是否正确." << endl;
 }
 //面向用户的移除函数
+//(有文本输出)
 
 node* trie::baseSearch(string keyword,node* rootIn)
 {
@@ -209,7 +210,8 @@ void showResult()
 	stable_sort(searchResult.begin(), searchResult.end());
 	int seqNumber=1;
 	for (string s : searchResult) {
-		cout <<"第"<<seqNumber<<"个建议" <<"      " << s << endl;
+		cout <<"第"<<seqNumber<<"个建议" <<"      " << s
+			 << "      " << showTrans(s) << endl;
 		seqNumber++;
 	}
 	resMaximumSeqNumber = seqNumber - 1;
@@ -221,6 +223,7 @@ void showResult()
 void addToFavoriate(string keyword){
 	favoriateList.push_back(keyword);
 }
+//将词汇加入收藏夹
 
 void selectResult(int seqNumber) {
 gate0:
@@ -231,6 +234,9 @@ gate0:
 		favoriateList.push_back(searchResult[seqNumber - 1]);
 	}
 }
+//选择搜索结果
+// (有文本输出)
+// (未完成)
 
 void clearFavoriate()
 {
@@ -242,19 +248,19 @@ void showFavoriate()
 {
 	stable_sort(favoriateList.begin(), favoriateList.end());
 }
-//未完成
+//(未完成)
 
 void readDictionary(ifstream& dictionary,trie trie)
 {
-	while (dictionary.fail()){
-		string temp,english,zhtrans;
-		getline(dictionary, temp);
+	string temp, english, zhtrans;
+	while (getline(dictionary, temp)) 
+	{
 		istringstream rawLine(temp);
 		getline(rawLine, english, '\t');
 		getline(rawLine, zhtrans);
 		tagAndTrans.insert(make_pair(english, zhtrans));
 		trie.insert(english);
-	} 
+	}
 }
 //将字典中的内容按行读入
 
@@ -263,8 +269,10 @@ bool addWord(string fullWork)
 	return false;
 }
 
-void userAddWord(string fullWord)
+void userAddWord(string fullWord,trie trie)
 {
+	trie.insert(fullWord);
+
 }
 
 bool deleteWord(string toDelete)
@@ -272,18 +280,32 @@ bool deleteWord(string toDelete)
 	return false;
 }
 
-void userDeleteWord(string toDelete)
+string showTrans(string tag)
+{
+	auto temp = tagAndTrans.find(tag);
+	if (temp == tagAndTrans.end())
+		return "没有中文翻译";
+	return temp->second;
+}
+//获得一个Tag的翻译
+
+void userDeleteWord(string toDelete,trie trie){
+	if (trie.remove(toDelete))
+	{
+		cout << "词汇 " << toDelete << " 已成功删除" << endl;
+		changeRecord.push_back(make_pair(toDelete, "删除"));
+		tagAndTrans.erase(toDelete);
+	}
+	else cout << "删除失败,词库中不存在这个词,请检查输入正确性" << endl;
+}
+//删除词汇函数
+// (有文本输出)
+
+void saveChange(ofstream& dictOut)
 {
 }
 
-bool findTrans(string tag)
-{
-	return false;
-}
 
-void showTrans(string tag)
-{
-}
 
 
 
