@@ -8,7 +8,7 @@ node* node::findChild(char c) {
 	return (*targetChild).second;
 } //查找到内容为指定字符的子节点
 
-char node::readContent() {
+char node::readContent() const{
 	return nodeContent;
 }//访问当前节点的字符内容
 
@@ -32,7 +32,9 @@ node::node() {
 //默认构造函数构造root节点
 
 node* node::whereKey(char key) {
-	for (auto nextpair : next) 
+	for (auto &nextpair : next) 
+		//习惯:对复杂数据类型进行遍历且不进行修改时使用引用
+		//以避免牵扯到多个复制构造函数引发错误或浪费
 	{
 		if (nextpair.first == key)
 			return nextpair.second;
@@ -264,21 +266,15 @@ void readDictionary(ifstream& dictionary,trie trie)
 }
 //将字典中的内容按行读入
 
-bool addWord(string fullWork)
-{
-	return false;
-}
-
-void userAddWord(string fullWord,trie trie)
+void userAddWord(string fullWord,string trans,trie trie)
 {
 	trie.insert(fullWord);
-
+	changeRecord.push_back(make_pair(fullWord, "添加"));
+	tagAndTrans.insert(make_pair(fullWord, trans));
+	cout << "标签 " << fullWord << " 已被加入词库" << endl;
 }
-
-bool deleteWord(string toDelete)
-{
-	return false;
-}
+//面向用户的删除函数
+//(有文本输入)
 
 string showTrans(string tag)
 {
@@ -301,12 +297,17 @@ void userDeleteWord(string toDelete,trie trie){
 //删除词汇函数
 // (有文本输出)
 
-void saveChange(ofstream& dictOut)
+void saveChange()
 {
+	ofstream dictionaryTemp(path, ios_base::trunc);
+	for (auto &temp : tagAndTrans) {
+		string lineTemp;
+		lineTemp = temp.first + '\t' + temp.second+'\n';
+		//以上将修改后的字典保存成行,准备在下方进行写入
+		size_t byteCount = lineTemp.size() * sizeof(char);
+		dictionaryTemp.write(lineTemp.data(), byteCount);
+		//当前行写入完毕,进入下次写入
+	}
+	dictionaryTemp.close();
 }
-
-
-
-
-
-
+//保存修改函数

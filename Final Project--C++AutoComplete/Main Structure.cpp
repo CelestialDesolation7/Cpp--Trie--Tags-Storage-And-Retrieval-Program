@@ -14,7 +14,7 @@ int main(){
 	cout << "Copyleft (c) megahard 2023" << endl << "All left reserved.\n";
 	history record;
 	trie mainTrie;
-	ifstream dictionary("dictionary.txt");
+	ifstream dictionary(path);
 
 	if (!dictionary.is_open()) {
 		std::cerr << "无法打开文件,请检查dictionary.txt是否与本exe文件位于同一目录后重启程序." << endl;
@@ -24,6 +24,5 @@ int main(){
 	readDictionary(dictionary, mainTrie);
 	cout << "字典构建完成,请输入您要搜索的内容.";
 	dictionary.close();
-	ofstream dictionaryTemp("dictionary.txt");
-
+	
 }

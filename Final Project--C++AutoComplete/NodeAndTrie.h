@@ -18,7 +18,7 @@ private:
 public:
 	int layer; //层数
 	map<char, node*> next; //子节点表
-	char readContent();
+	char readContent()const;
 	node* parent;
 	int childCount; //子节点数
 
@@ -62,6 +62,7 @@ using layerGroup = vector<node*>;
 using groupCatalog = map<int, layerGroup>;
 using catalogEle = pair<int, layerGroup>;
 using changeUnit = pair<string, string>;
+using tagTransPair = pair<string, string>;
 
 ////////////////////////////////////////////////////////
 //全局容器//////////////////////////////////////////////
@@ -91,8 +92,12 @@ string showTrans(string tag);
 ///////////////////////////////////////////////////////
 
 void readDictionary(ifstream& dictionary,trie trie);
-bool addWord(string fullWork);
-void userAddWord(string fullWord,trie trie);
-bool deleteWord(string toDelete);
+void userAddWord(string fullWord,string trans,trie trie);
 void userDeleteWord(string toDelete,trie trie);
 void saveChange();
+
+//////////////////////////////////////////////////////////
+//特殊名词定义////////////////////////////////////////////
+//////////////////////////////////////////////////////////
+
+#define path "dictionary.txt"
