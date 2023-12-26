@@ -128,11 +128,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="GlobalFunction.cpp" />
+    <ClCompile Include="UserInterface.cpp" />
     <ClCompile Include="Main Structure.cpp" />
     <ClCompile Include="Node.cpp" />
     <ClCompile Include="Trie.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="UserInterface.h" />
     <ClInclude Include="History.h" />
     <ClInclude Include="NodeAndTrie.h" />
   </ItemGroup>
