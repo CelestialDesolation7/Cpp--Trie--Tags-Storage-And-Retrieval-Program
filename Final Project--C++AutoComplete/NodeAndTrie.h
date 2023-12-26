@@ -32,7 +32,6 @@ public:
 	void layerClassify();
 	//根据layer值对node进行分组
 	void markNotEnd();
-
 };
 
 class trie {
@@ -51,7 +50,6 @@ public:
 	string readResult(node* edge);
 
 	trie();
-
 };
 
 /////////////////////////////////////////////////////

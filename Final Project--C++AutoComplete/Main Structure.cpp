@@ -9,7 +9,6 @@
 #include <fstream>
 
 
-
 int main(){
 	cout << "Copyleft (c) megahard 2023" << endl << "All left reserved.\n";
 	history record;
