@@ -1,19 +1,11 @@
 #include "NodeAndTrie.h"
 #include "History.h"
-#include <iostream>
-#include <fstream>
-#include <vector>
-#include <string>
-#include <algorithm>
-#include <string>
-#include <fstream>
-
 
 int main(){
 	cout << "Copyleft (c) megahard 2023" << endl << "All left reserved.\n";
 	history record;
 	trie mainTrie;
-	ifstream dictionary(path);
+	ifstream dictionary(mainPath);
 
 	if (!dictionary.is_open()) {
 		std::cerr << "无法打开文件,请检查dictionary.txt是否与本exe文件位于同一目录后重启程序." << endl;

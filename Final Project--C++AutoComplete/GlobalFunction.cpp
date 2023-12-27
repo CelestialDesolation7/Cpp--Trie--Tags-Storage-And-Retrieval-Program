@@ -77,7 +77,7 @@ void userAddWord(string fullWord,string trans,trie trie)
 	cout << "标签 " << fullWord << " 已被加入词库" << endl;
 }
 //面向用户的删除函数
-//(有文本输入)
+//(有文本输出)
 
 string showTrans(string tag)
 {
@@ -102,7 +102,7 @@ void userDeleteWord(string toDelete,trie trie){
 
 void saveChange()
 {
-	ofstream dictionaryTemp(path, ios_base::trunc);
+	ofstream dictionaryTemp(mainPath, ios_base::trunc);
 	for (auto &temp : tagAndTrans) {
 		string lineTemp;
 		lineTemp = temp.first + '\t' + temp.second+'\n';
@@ -114,3 +114,29 @@ void saveChange()
 	dictionaryTemp.close();
 }
 //保存修改函数
+
+void readMultiDict(string pathIn,trie trie)
+{
+	filesystem::path folderPath = pathIn;
+	filesystem::directory_iterator iteratorIn(pathIn);
+	bool foundDict = 0;
+	for (const auto& eachEntry : iteratorIn) {
+		bool isDict = eachEntry.path().extension() == stdextension;
+		if (eachEntry.is_regular_file() && isDict) {
+			foundDict = 1;
+			break;
+		}
+	}
+	if (!foundDict) {
+		throw(runtime_error("读取错误:指定目录下不存在有效文件."));
+	}
+	for (const auto& eachEntry : iteratorIn) {
+		//end()全局函数接收上述目录时返回尾后迭代器
+		if (eachEntry.is_regular_file()) {
+			ifstream fileNow(eachEntry.path());
+			readDictionary(fileNow, trie);
+		}
+	}
+}
+//进行多字典文件整合化读取的函数
+

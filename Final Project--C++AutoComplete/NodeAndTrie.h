@@ -8,6 +8,7 @@
 #include <map>
 #include <utility>
 #include <sstream>
+#include <filesystem>
 
 using namespace std;
 
@@ -91,12 +92,15 @@ string showTrans(string tag);
 
 void readDictionary(ifstream& dictionary, trie trie);
 void saveChange();
+void readMultiDict(string pathIn,trie trie);
 
 //////////////////////////////////////////////////////////
 //特殊名词定义////////////////////////////////////////////
 //////////////////////////////////////////////////////////
 
-#define path "dictionary.txt"
+#define mainPath "dictionary.txt"
+#define pathToFile "D:\Project\Final Project--C++AutoComplete\Final Project--C++AutoComplete\Dictionary"
+#define stdextension ".txt"
 
 //////////////////////////////////////////////////////////
 //面向用户函数////////////////////////////////////////////
@@ -104,3 +108,7 @@ void saveChange();
 
 void userAddWord(string fullWord,string trans,trie trie);
 void userDeleteWord(string toDelete,trie trie);
+
+//////////////////////////////////////////////////////////
+//异常定义////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
