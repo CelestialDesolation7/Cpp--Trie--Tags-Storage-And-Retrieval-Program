@@ -139,4 +139,3 @@ void readMultiDict(string pathIn,trie trie)
 	}
 }
 //进行多字典文件整合化读取的函数
-

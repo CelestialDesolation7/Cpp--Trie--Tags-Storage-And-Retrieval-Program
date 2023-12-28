@@ -4,11 +4,11 @@
 #include <vector>
 #include <string>
 #include <algorithm>
-#include <string>
 #include <map>
 #include <utility>
 #include <sstream>
 #include <filesystem>
+#include "History.h"
 
 using namespace std;
 
@@ -38,18 +38,17 @@ public:
 class trie {
 private:
 	node root;
-	int count;//词汇数
 public:
-	int insert(string wordIn);
-	bool remove(string Deleted);
-	void userRemove(string keyword);
 	static int maxLayer;
+	int count;//词汇数
 
 	node* baseSearch(string keyword,node* rootIn);
 	void layerSearch(string keyword,int layerIn);
 	void deepSearch(string keyword);
 	string readResult(node* edge);
-
+	int insert(string wordIn);
+	bool remove(string Deleted);
+	void userRemove(string keyword);
 	trie();
 };
 
@@ -67,11 +66,14 @@ using tagTransPair = pair<string, string>;
 //全局容器//////////////////////////////////////////////
 ////////////////////////////////////////////////////////
 
-vector<string> searchResult;
+vector<string> searchResult;//用于临时存储搜索结果用于展示
 map<string, string>tagAndTrans;
 groupCatalog enCatalog;
 vector<string> favoriateList;
 vector<changeUnit> changeRecord;
+history record;
+trie mainTrie;
+trie commandTrie;
 
 /////////////////////////////////////////////////
 //数据展示函数///////////////////////////////////
@@ -95,7 +97,7 @@ void saveChange();
 void readMultiDict(string pathIn,trie trie);
 
 //////////////////////////////////////////////////////////
-//特殊名词定义////////////////////////////////////////////
+//文件路径定义////////////////////////////////////////////
 //////////////////////////////////////////////////////////
 
 #define mainPath "dictionary.txt"
