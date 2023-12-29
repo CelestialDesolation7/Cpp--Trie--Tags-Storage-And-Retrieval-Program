@@ -18,16 +18,13 @@
     <ClCompile Include="Main Structure.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Node.cpp">
+    <ClCompile Include="TrieAndNode.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Trie.cpp">
+    <ClCompile Include="Command.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="GlobalFunction.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInterface.cpp">
+    <ClCompile Include="Value.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -35,10 +32,7 @@
     <ClInclude Include="NodeAndTrie.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="History.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInterface.h">
+    <ClInclude Include="Command.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

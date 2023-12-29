@@ -136,21 +136,6 @@ public:
 };
 //»∑»œ÷∏¡Ó
 
-class 
-
 command* analyseCommand(string userCommand);
 bool operationEqual(string str1, string str2);
 static bool charEqual(char c1, char c2);
-
-string command::operationClass = "command";
-string helpCmd::operationClass = "help";
-string deleteCmd::operationClass = "delete";
-string addCmd::operationClass = "add";
-string recordCmd::operationClass = "record";
-string showFavoriateCmd::operationClass = "showFavoriate";
-string clearFavoriateCmd::operationClass = "clearFavoriate";
-string wildcardCmd::operationClass = "wildcard";
-string searchCmd::operationClass = "search";
-string saveCmd::operationClass = "save";
-string quitCmd::operationClass = "quit";
-string confirmCmd::operationClass = "confirm";

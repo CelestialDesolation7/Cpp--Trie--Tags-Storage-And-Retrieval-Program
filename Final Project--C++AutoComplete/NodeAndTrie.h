@@ -1,16 +1,18 @@
 #pragma once
-#include <iostream>
-#include <fstream>
-#include <vector>
-#include <string>
-#include <algorithm>
 #include <map>
 #include <utility>
 #include <sstream>
 #include <filesystem>
-#include "History.h"
+#include <iostream>
+#include <stdlib.h>
+#include <fstream>
+#include <vector>
 
 using namespace std;
+
+//////////////////////////////////////////////////////////
+//节点类//////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
 
 class node {
 private:
@@ -30,17 +32,28 @@ public:
 	//功能模块化思想:单独设计一个判断是否有所需子节点的函数
 	void markEnd();
 	//为了insert标记结尾节点而设计
-	void layerClassify();
-	//根据layer值对node进行分组
 	void markNotEnd();
 };
+
+/////////////////////////////////////////////////////
+//类型别名///////////////////////////////////////////
+/////////////////////////////////////////////////////
+
+using layerGroup = vector<node*>;
+using changeUnit = pair<string, string>;
+using tagTransPair = pair<string, string>;
+
+//////////////////////////////////////////////////////////
+//字典树类////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
 
 class trie {
 private:
 	node root;
 public:
-	static int maxLayer;
+	int maxLayer = 0;
 	int count;//词汇数
+	map<int, layerGroup> layerCatalog; //深度值到对应深度节点群映射的表
 
 	node* baseSearch(string keyword,node* rootIn);
 	void layerSearch(string keyword,int layerIn);
@@ -50,30 +63,24 @@ public:
 	bool remove(string Deleted);
 	void userRemove(string keyword);
 	trie();
+	void layerClassify(node* nodeIn);
+	//根据layer值对node进行分组
 };
-
-/////////////////////////////////////////////////////
-//类型别名///////////////////////////////////////////
-/////////////////////////////////////////////////////
-
-using layerGroup = vector<node*>;
-using groupCatalog = map<int, layerGroup>;
-using catalogEle = pair<int, layerGroup>;
-using changeUnit = pair<string, string>;
-using tagTransPair = pair<string, string>;
 
 ////////////////////////////////////////////////////////
 //全局容器//////////////////////////////////////////////
 ////////////////////////////////////////////////////////
 
-vector<string> searchResult;//用于临时存储搜索结果用于展示
-map<string, string>tagAndTrans;
-groupCatalog enCatalog;
-vector<string> favoriateList;
-vector<changeUnit> changeRecord;
-history record;
-trie mainTrie;
-trie commandTrie;
+extern vector<string> searchResult;    //用于临时存储搜索结果用于展示
+extern map<string, string>tagAndTrans; //标签与翻译映射表
+extern vector<string> favoriateList;   //收藏夹容器
+extern vector<changeUnit> changeRecord;//更改目录容器
+extern int resMinimumSeqNumber;		   //最小序列号,临时存储搜索结果编号
+extern int resMaximumSeqNumber;		   //最大序列号,临时存储搜索结果编号
+extern vector<string> record;		   //历史记录存储容器实例
+extern trie mainTrie;				   //英文Tag存储树
+extern trie commandTrie;			   //指令存储树
+extern trie zhTransTrie;			   //中文翻译存储树,由于char类型限制可能无法实现
 
 /////////////////////////////////////////////////
 //数据展示函数///////////////////////////////////
@@ -82,10 +89,6 @@ trie commandTrie;
 void showResult();
 void addToFavoriate(string keyword);
 void selectResult(int seqNumber);
-void clearFavoriate();
-void showFavoriate();
-int resMinimumSeqNumber = 1;
-int resMaximumSeqNumber = 0;
 string showTrans(string tag);
 
 ///////////////////////////////////////////////////////
@@ -101,7 +104,7 @@ void readMultiDict(string pathIn,trie trie);
 //////////////////////////////////////////////////////////
 
 #define mainPath "dictionary.txt"
-#define pathToFile "D:\Project\Final Project--C++AutoComplete\Final Project--C++AutoComplete\Dictionary"
+#define pathToFile "multiDictionary"
 #define stdextension ".txt"
 
 //////////////////////////////////////////////////////////

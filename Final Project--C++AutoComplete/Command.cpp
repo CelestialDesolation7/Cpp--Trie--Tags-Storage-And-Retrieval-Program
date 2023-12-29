@@ -1,6 +1,7 @@
 #include "Command.h"
 #include "NodeAndTrie.h"
 
+
 static bool charEqual(char c1, char c2) {
 	return tolower(c1) == tolower(c2);
 }
@@ -54,7 +55,6 @@ void clearFavoriateCmd::execute()
 	cout << "收藏夹已成功清空" << endl;
 }
 //清空收藏夹指令已完成
-
 void deleteCmd::execute()
 {
 	if (this->content.empty())
@@ -97,7 +97,7 @@ void addCmd::execute()
 		else { cout << "已放弃添加.\n"; }
 	}
 }
-//添加指令已完成
+//添加指令(要修改)
 
 void recordCmd::execute()
 {

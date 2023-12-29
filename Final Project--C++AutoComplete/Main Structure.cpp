@@ -1,7 +1,5 @@
 #include "NodeAndTrie.h"
-#include "History.h"
 #include "Command.h"
-#include <stdlib.h>
 
 int main(){
 	system("color 0A");
@@ -12,17 +10,16 @@ int main(){
 		 << "==============================================================\n";
 	cout << "请稍等,正在构建字典" << endl;
 	
-	ifstream dictionary(mainPath);
-
-	if (!dictionary.is_open()) {
-		std::cerr << "无法打开文件,请检查字典文件是否与本exe文件位于同一目录后重启程序." << endl;
-		return 1;
-		cin.get();
+	try {
+		readMultiDict(pathToFile, mainTrie);
 	}
-	readDictionary(dictionary, mainTrie);
+	catch (runtime_error &exception) {
+		cerr << exception.what() << endl;
+		return 1;
+	}
 	cout << "字典构建完成,现在您可以开始使用.如果需要操作指导,请使用help指令." << endl
-		<< "此处,\"使用指令\"指的是输入指令文本后按Enter键" << endl;
-	dictionary.close();
+		 << "此处,\"使用指令\"指的是输入指令文本后按Enter键" << endl;
+	
 	string userCommand;
 	while (true) {
 		getline(cin, userCommand);
