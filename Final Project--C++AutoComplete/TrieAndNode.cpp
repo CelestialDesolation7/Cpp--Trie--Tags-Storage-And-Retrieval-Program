@@ -57,7 +57,30 @@ bool trie::remove(string deleted)
 
 		if (tempPtr != &root)
 			//关键:避免删除根节点导致字典树损毁
+		{
+			int layerNow = tempPtr->layer;
+			//记录半删除态节点的层数
+			auto layerGroupPairNow = this->layerCatalog.find(layerNow);
+			//记录半删除态节点的层数对应的<层数,层节点群存储器>二元组
+			auto& layerGroupNow = layerGroupPairNow->second;
+			//获取指向上述二元组的第二者(即层节点群存储器)的引用名
+			for (auto nodePtrIterator = layerGroupNow.begin(); nodePtrIterator < layerGroupNow.end();nodePtrIterator++) {
+				//遍历上述存储器,找到其中存储的"指向当前工作对象--半删除态节点"的指针
+				if (*nodePtrIterator == tempPtr)layerGroupNow.erase(nodePtrIterator);
+				//将该指针删除,随后循环短路
+				break;
+			}
+			//此时不再有永久性指针指向当前工作对象,避免指针悬空
 			delete tempPtr;
+			//半删除态转化为已删除态
+			if (layerGroupPairNow->second.empty())
+				//检查前述的存储器,检查其是否已经空出
+			{
+				this->layerCatalog.erase(layerNow);
+				maxLayer--;
+			}	//警告:如果意图用if语句执行的复合部分用分号分割而没有用大括号封装,不会报错
+				//如果发现一个层节点群存储器已空,则将其删除并削减最大层数
+		}
 		else return 1;
 
 		tempPtr = nextToDelete;
@@ -221,8 +244,6 @@ void showResult()
 	}
 	resMaximumSeqNumber = seqNumber - 1;
 	cout << "如果希望保存某个搜索记录,请输入其对应数字并按Enter" << endl;
-	cout << "(第NaN个建议      请不要总是试图输入非法内容试图引发程序崩溃,写判断用户输入是否合法的代码真的很无聊!)" << endl;
-
 }
 
 void addToFavoriate(string keyword) {

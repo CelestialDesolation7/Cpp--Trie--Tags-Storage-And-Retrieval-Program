@@ -55,6 +55,7 @@ void clearFavoriateCmd::execute()
 	cout << "收藏夹已成功清空" << endl;
 }
 //清空收藏夹指令已完成
+
 void deleteCmd::execute()
 {
 	if (this->content.empty())
@@ -84,20 +85,43 @@ void addCmd::execute()
 		cout << "您没有输入想要添加的Tag.请重试.\n";
 	}
 	else {
-		cout << "您确定要添加 " << this->content << " 这个词吗?您随后仍然可以在退出程序时放弃更改.\n"
-			<< "如果确定,请使用confirm指令," << "否则输入任何其他内容.\n";
+		int chineseIndex = 0;
+		bool havetrans = 0;
+		string tag, trans;
+		for (auto contentElement : this->content) {
+			if (isalpha(contentElement) || isspace(contentElement))
+				chineseIndex++;
+			else break;
+		}
+		if (chineseIndex == 0)
+			cout << "您仅输入了中文没有输入英文,或者将中英文的顺序写反了,请重试.\n";
+		else {
+			tag = this->content.substr(0, chineseIndex);
+			havetrans = (!chineseIndex == this->content.size());
+			if(!havetrans)
+			trans = this->content.substr(chineseIndex);
+		}
+		cout << "您确定要添加 " << tag;
+
+		if(havetrans)cout << " (" << trans << ") ";
+		else cout << " (没有给出翻译) ";
+
+		cout << " 这个词吗?\n您随后仍然可以在退出程序时放弃更改.\n"
+			 << "如果确定,请使用confirm指令," << "否则输入任何其他内容.\n";
+
 		string ifConfirm;
 		getline(cin, ifConfirm);
 		command* temp= analyseCommand(ifConfirm);
 		if (temp!=nullptr && temp->readClass() != "confirm")
 		{
 			int countNow = mainTrie.insert(this->content);
+			tagAndTrans.insert(make_pair(tag, trans));
 			cout << "添加已成功.当前共有 " << countNow << " 个词汇\n";
 		}
 		else { cout << "已放弃添加.\n"; }
 	}
 }
-//添加指令(要修改)
+//添加指令
 
 void recordCmd::execute()
 {
@@ -114,25 +138,28 @@ void clearScreenCmd::execute()
 
 void helpCmd::execute()
 {
-	cout << "=====================================================================\n"
+	cout << "=======================================================================\n"
 		 << "                              指令列表                            \n"
-		 << "search-----查找包含关键词的Tag   delete----删除输入的Tag		 \n"
-		 << "add--------增加一个新词汇        record----收藏编号对应的搜索结果\n"
-		 << "clear------清空当前对话窗口      help------查看指令列表         \n"
-		 << "favoriate--展示收藏夹            wildcard--查看通配符搜索介绍\n"
-		 << "save-------保存对词库的修改      quit------退出程序\n"
-		 << "confirm----确认指令              count-----查看当前词汇总数\n"
-		 << "=====================================================================\n"
+		 << "search-----查找包含关键词的Tag       delete----删除输入的Tag		 \n"
+		 << "add--------增加一个新词汇            record----收藏编号对应的搜索结果\n"
+		 << "clear------清空当前对话窗口          help------查看指令列表         \n"
+		 << "favoriate--展示收藏夹                wildcard--查看通配符搜索介绍\n"
+		 << "save-------保存对词库的修改          quit------退出程序\n"
+		 << "confirm----确认指令                  count-----查看当前词汇总数\n"
+		 << "=======================================================================\n"
 		 << "                              使用说明                            \n"
 		 << "  前四个指令均需要输入由您指定的内容,例如搜索的关键词,要删除的是什么.\n"
 		 << "其余指令均不需要在指令名称后输入内容,即使您输入了内容也不会产生作用.\n"
 		 << "您可以输入不完整的指令,如\"con\",程序会自动识别为confirm.但是需要注意\n"
 		 << "当输入前缀(如\"c\")与多个指令匹配时程序无法猜中您的意思,您需要重新输入\n"
 		 << "指令和您指定的内容之间以空格分割,一个就好,但是更多空格程序也能正常识别\n"
-		 << "该程序支持您一次输入多个关键词,也支持通配符的使用."
-		 << "======================================================================\n";
+		 << "该程序支持您一次输入多个关键词,也支持通配符的使用.\n"
+		 << "  在需要插入tag时,您可以选择性地给出对应的中文翻译.search,tag和中文之间\n"
+		 << "以空格分隔,例如\"add apple 苹果\".您的英文tag本身可以包含空格,程序能够\n"
+		 << "正确识别哪些是Tag哪些是中文翻译.您也可以不给出中文翻译."
+		 << "=======================================================================\n";
 }
-//帮助指令
+//帮助指令已完成
 
 void wildcardCmd::execute()
 {
@@ -140,6 +167,7 @@ void wildcardCmd::execute()
 
 void searchCmd::execute()
 {
+	
 }
 
 void saveCmd::execute()
