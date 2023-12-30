@@ -11,10 +11,18 @@ int trie::insert(string wordIn) {
 	for (char c : wordIn) {
 		if (current->whereKey(c) == nullptr) 
 		{
-			node* temp=new node(c,0,current->layer+1,current);
+			//注意:此处涉及到具有关联特征的类对象实例,需要进行广域的状态变化敏感性检测
+			node* temp=new node(c,false,current->layer+1,current);
+			//当前节点成为新节点的上邻节点
 			if (!newNodeCreated)newNodeCreated = true;
 			layerClassify(temp);
+			//将子节点插入层群
+			current->allChild.push_back(temp);
+			//插入子节点非映射目录
 			current->next.insert(make_pair(c,temp));
+			//插入子节点映射目录
+			current->childCount++;
+			//修改子节点数量记录
 			current->markNotEnd();
 			//修改为非端点
 			current = temp;
@@ -28,15 +36,15 @@ int trie::insert(string wordIn) {
 	}
 	//循环结束,这代表current指向了当前单词末尾所在节点,对其标记
 	current->markEnd();
-	if(newNodeCreated)count++;
+	if(newNodeCreated)this->count++;
 	return count;
 }
 //插入单词函数
 
 void trie::layerClassify(node* nodeIn)
 {
-	auto iterTemp = layerCatalog.find(nodeIn->layer);
-	if (iterTemp != layerCatalog.end())
+	auto iterTemp = this->layerCatalog.find(nodeIn->layer);
+	if (iterTemp != this->layerCatalog.end())
 	{
 		iterTemp->second.push_back(nodeIn);
 		return;
@@ -46,16 +54,21 @@ void trie::layerClassify(node* nodeIn)
 	auto newLayerGroup = new layerGroup;
 	newLayerGroup->push_back(nodeIn);
 	layerCatalog.insert(make_pair(nodeIn->layer, *newLayerGroup));
-	trie::maxLayer = nodeIn->layer;
+	this->maxLayer = nodeIn->layer;
 }
 //根据node构造时的层数决定是不是要新建一个vector来容纳
 
 bool trie::remove(string deleted)
 {
-	auto tempPtr = baseSearch(deleted, &this->root);
-	if (tempPtr == nullptr)
+
+	vector<node*> tempSeed = baseSearch(deleted, &this->root);
+	//通过根搜索找到希望删除的词汇
+	if (tempSeed.size()!=1)
 		return 0;
+	//搜索无效,向上传递false指示
+	node* tempPtr = tempSeed[0];
 	node* nextToDelete = tempPtr->parent;
+	//获取待删除节点的指针
 	while (tempPtr->childCount == 0) {
 
 		if (tempPtr != &root)
@@ -64,9 +77,14 @@ bool trie::remove(string deleted)
 			int layerNow = tempPtr->layer;
 			//记录半删除态节点的层数
 			auto layerGroupPairNow = this->layerCatalog.find(layerNow);
-			//记录半删除态节点的层数对应的<层数,层节点群存储器>二元组
+			//记录指向半删除态节点的层数对应的<层数,层节点群存储器>二元组的迭代器(指针)
 			auto& layerGroupNow = layerGroupPairNow->second;
 			//获取指向上述二元组的第二者(即层节点群存储器)的引用名
+			nextToDelete->next.erase(tempPtr->readContent());
+			//在待删除节点的映射性子节点表中,清除指向当前半删除态节点的<字符,节点指针>二元组
+			auto iterTemp = find(nextToDelete->allChild.begin(), nextToDelete->allChild.end(), tempPtr);
+			//在待删除节点的非映射性子节点表中,找到并清除指向当前半删除态节点的节点指针
+			nextToDelete->allChild.erase(iterTemp);
 			for (auto nodePtrIterator = layerGroupNow.begin(); nodePtrIterator < layerGroupNow.end();nodePtrIterator++) {
 				//遍历上述存储器,找到其中存储的"指向当前工作对象--半删除态节点"的指针
 				if (*nodePtrIterator == tempPtr)layerGroupNow.erase(nodePtrIterator);
@@ -75,7 +93,9 @@ bool trie::remove(string deleted)
 			}
 			//此时不再有永久性指针指向当前工作对象,避免指针悬空
 			delete tempPtr;
+			nextToDelete->childCount--;
 			//半删除态转化为已删除态
+
 			if (layerGroupPairNow->second.empty())
 				//检查前述的存储器,检查其是否已经空出
 			{
@@ -104,16 +124,31 @@ void trie::trieRemove(string keyword)
 }
 //面向用户的移除函数
 
-node* trie::baseSearch(string keyword,node* rootIn)
+vector<node*> trie::baseSearch(string keyword,node* rootIn)
 {
+	vector<node*> resultSeed;
 	node* current = rootIn;
 	for (char c : keyword) {
 		auto temp = current->whereKey(c);
 		if (temp == nullptr)
-			return nullptr;
+			return resultSeed;
 		current = temp;
 	}
-	return current;
+	//执行到此处,说明注意力指针现已指向该(树/子树)中一个内容与keyword最后字符相等的节点
+	if (current->isEndOfWord) {
+		resultSeed.push_back(current);
+		return resultSeed;
+	}
+	function<void(node*)> findAllSeed = [&resultSeed,&findAllSeed](node* rootTemp) {
+		for (node* childNow : rootTemp->allChild) {
+			if (childNow->isEndOfWord)resultSeed.push_back(childNow);
+			else findAllSeed(childNow);}
+		};
+		//如果当前节点是端,则不会存在更多匹配项.直接返回所有结果种子.
+	//注意:此处使用Lambda表达式递归调用自身搜索全部端点
+	findAllSeed(current);
+	return resultSeed;
+	//如果执行到此处,说明搜索关键词位于当前(树/子树)的中部,需要广度遍历所有端点
 }
 //基本搜索函数
 
@@ -125,9 +160,11 @@ void trie::layerSearch(string keyword,int layerIn, vector<string>& searchResultI
 	//如果找不到符合要求的层则直接不搜索
 	for (auto tempNodePtr : itertemp->second) 
 	{
-		string tempResult=readResult(baseSearch(keyword, tempNodePtr));
-		if(!tempResult.empty())
-		searchResultIn.push_back(tempResult);
+		vector<node*> seedGroupNow = baseSearch(keyword, tempNodePtr);
+		for (auto seedNow : seedGroupNow) {
+			string tempResult = readResult(seedNow);
+			searchResultIn.push_back(tempResult);
+		}
 	}
 	//对指定层的每个节点进行基本搜索(baseSearch)并将结果发送至结果存储区
 }
@@ -156,16 +193,17 @@ string trie::readResult(node* edge)
 		current = current->parent;
 	}
 	//如果上级查找函数返回了有意义的指针,则开始读取
+	reverse(result.begin(), result.end());
 	return result;
 }
 //读取搜索结果
 
-trie::trie()
-{
-	root = node();
-	count = 0;
-	maxLayer = 0;
-}
+trie::trie():
+	root(node()),
+	count(0),
+	maxLayer(0){
+	layerClassify(&root);
+	}
 //构造树种子(初始字典树)
 
 ///////////////////////////////////////////////////////////////
@@ -183,22 +221,19 @@ char node::readContent() const {
 	return nodeContent;
 }//访问当前节点的字符内容
 
-node::node(char inputContent, bool isEnd, int layerIn, node* parentNode) {
-	layer = layerIn;
-	isEndOfWord = isEnd;
-	nodeContent = inputContent;
-	childCount = 0;
-	map<char, node*> next;
-	parent = parentNode;
-}//为insert准备的有参构造函数
+node::node(char inputContent, bool isEnd, int layerIn, node* parentNode):
+	layer(layerIn),
+	isEndOfWord(isEnd),
+	nodeContent(inputContent),
+	childCount(0),
+	parent(parentNode){}//为insert准备的有参构造函数
 
-node::node() {
-	isEndOfWord = 0;
-	childCount = 0;
-	layer = 0;
-	nodeContent = '0';
-	parent = nullptr;
-}
+node::node():
+	isEndOfWord(false),
+	childCount(0),
+	layer(0),
+	nodeContent('0'),
+	parent(nullptr){}
 //默认构造函数构造root节点
 
 node* node::whereKey(char key) {
@@ -220,8 +255,8 @@ void node::markEnd() {
 
 void node::markNotEnd()
 {
-	if (isEndOfWord == 1)
-		isEndOfWord = 0;
+	if (this->isEndOfWord == 1)
+		this->isEndOfWord = 0;
 }
 //某个节点将自身重新修改为非端节点的函数
 
@@ -242,7 +277,7 @@ void showResult()
 	int seqNumber = 1;
 	for (string s : searchResult) {
 		cout << "第" << seqNumber << "个建议" << "      " << s
-			<< "      " << showTrans(s) << endl;
+			<< "       (" << showTrans(s) <<")" << endl;
 		seqNumber++;
 	}
 	cout << "==========================================\n";
@@ -256,14 +291,14 @@ void addToFavoriate(string keyword) {
 }
 //将词汇加入收藏夹
 
-void readDictionary(ifstream& dictionary, trie trie)
+void readDictionary(ifstream& dictionary, trie& trie)
 {
 	string temp, english, zhtrans;
 	while (getline(dictionary, temp))
 	{
 		istringstream rawLine(temp);
 		getline(rawLine, english, '\t');
-		getline(rawLine, zhtrans);
+		getline(rawLine, zhtrans,'\t');
 		tagAndTrans.insert(make_pair(english, zhtrans));
 		trie.insert(english);
 	}
@@ -283,7 +318,7 @@ bool checkDictCount(string pathIn)
 }
 //检查字典库目录内是否仅存在一个字典文件
 
-void innerAddWord(string fullWord, string trans, trie trie)
+void innerAddWord(string fullWord, string trans, trie& trie)
 {
 	trie.insert(fullWord);
 	changeRecord.push_back(make_pair(fullWord, "添加"));
@@ -291,7 +326,7 @@ void innerAddWord(string fullWord, string trans, trie trie)
 }
 //内部添加函数
 
-void innerDeleteWord(string fullWord, trie trie) {
+void innerDeleteWord(string fullWord, trie& trie) {
 	trie.trieRemove(fullWord);
 	changeRecord.push_back(make_pair(fullWord, "删除"));
 	tagAndTrans.erase(fullWord);
@@ -322,9 +357,9 @@ void saveChange()
 }
 //保存修改函数
 
-void readMultiDict(string pathIn, trie trie)
+void readMultiDict(string pathIn, trie& trie)
 {
-	filesystem::path folderPath = pathIn;
+	filesystem::path folderPath(pathIn);
 	filesystem::directory_iterator iteratorIn(pathIn);
 	bool foundDict = 0;
 	//以下循环旨在判断是否存在有效文件

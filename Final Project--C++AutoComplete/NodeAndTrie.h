@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <fstream>
 #include <vector>
+#include <functional>
 
 using namespace std;
 
@@ -53,14 +54,14 @@ extern vector<string> cmdSearchRes;	   //存储搜索到的指令
 class node {
 private:
 	char nodeContent; //内容
-	bool isEndOfWord; //结尾标记
 public:
 	int layer; //层数
-	map<char, node*> next; //子节点表
-	char readContent()const;
 	node* parent;
-	int childCount; //子节点数
+	map<char, node*> next; //子节点表
+	bool isEndOfWord; //结尾标记
+	vector<node*> allChild;
 
+	//状态检定思想:建立处于对象操作环境中时的常时状态变化需求监测行为模式
 	node();
 	node(char inputContent, bool isEnd, int layerIn,node* parentNode);
 	node* findChild(char c);
@@ -69,6 +70,8 @@ public:
 	void markEnd();
 	//为了insert标记结尾节点而设计
 	void markNotEnd();
+	int childCount; //子节点数
+	char readContent()const;
 };
 
 //////////////////////////////////////////////////////////
@@ -83,7 +86,7 @@ public:
 	int count;//词汇数
 	map<int, layerGroup> layerCatalog; //深度值到对应深度节点群映射的表
 
-	node* baseSearch(string keyword,node* rootIn);
+	vector<node*> baseSearch(string keyword,node* rootIn);
 	void layerSearch(string keyword,int layerIn, vector<string>& searchResultIn = searchResult);
 	void deepSearch(string keyword);
 	string readResult(node* edge);
@@ -92,6 +95,7 @@ public:
 	void trieRemove(string keyword);
 	trie();
 	void layerClassify(node* nodeIn);
+	
 	//根据layer值对node进行分组
 };
 
@@ -107,9 +111,9 @@ string showTrans(string tag);
 //字典读取与修改函数///////////////////////////////////
 ///////////////////////////////////////////////////////
 
-void readDictionary(ifstream& dictionary, trie trie);
+void readDictionary(ifstream& dictionary, trie& trie);
 void saveChange();
-void readMultiDict(string pathIn,trie trie);
+void readMultiDict(string pathIn,trie& trie);
 bool checkDictCount(string pathIn);
 
 //////////////////////////////////////////////////////////
@@ -117,15 +121,15 @@ bool checkDictCount(string pathIn);
 //////////////////////////////////////////////////////////
 
 #define mainPath "dictionary\\dictionary.txt"
-#define pathToFile "dictionary"
+#define pathToFile "D:\\Project\\Final Project--C++AutoComplete\\Final Project--C++AutoComplete\\Dictionary"
 #define stdextension ".txt"
 
 //////////////////////////////////////////////////////////
 //面向用户函数////////////////////////////////////////////
 //////////////////////////////////////////////////////////
 
-void innerAddWord(string fullWord,string trans,trie trie);
-void innerDeleteWord(string fullWord,trie trie);
+void innerAddWord(string fullWord,string trans,trie& trie);
+void innerDeleteWord(string fullWord,trie& trie);
 bool askConfirm();
 void showChange();
 

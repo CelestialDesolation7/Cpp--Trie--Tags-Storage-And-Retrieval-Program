@@ -15,10 +15,12 @@ bool operationEqual(string str1, string str2)
 	};
 	stringToLower(str1);
 	stringToLower(str2);
-	if(equal(str1.begin(),str1.end(),str2.begin()))
+	if(str1==str2)
 		return true;
 	commandTrie.layerSearch(str1,0,cmdSearchRes);
-	if (cmdSearchRes.size() != 1 || cmdSearchRes[0] == str2) {
+	bool includeTarget = false;
+	includeTarget = (find(cmdSearchRes.begin(), cmdSearchRes.end(), str2) != cmdSearchRes.end());
+	if (cmdSearchRes.size() >= 1 && includeTarget) {
 		cmdSearchRes.clear();
 		return true; }
 	else { 
@@ -90,7 +92,7 @@ commandPair lexicalAnalyser(string commandIn){
 	string content;
 	istringstream temp(commandIn);
 	temp >> operation;
-	getline(temp, content);
+	getline(temp>>ws, content);
 	return commandPair(operation,content);
 }
 //将指令和内容分离并返回指令内容二元组的简单词法分析器
@@ -101,8 +103,10 @@ command* analyseCommand(string userCommand)
 	string content;
 	istringstream temp(userCommand);
 	temp >> operation;
-	getline(temp, content);
-	return stringToCmd(operationGuess(operation), content);
+	getline(temp>>ws, content);
+	operation = operationGuess(operation);
+	cmdSearchRes.clear();
+	return stringToCmd(operation, content);
 }
 //面向用户输入信息的指令词法分析器
 //内存泄露警告:任何调用该映射器的函数均需要做内存初始化处理
