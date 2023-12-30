@@ -10,6 +10,42 @@
 
 using namespace std;
 
+////////////////////////////////////////////////////////
+//前向引用声明//////////////////////////////////////////
+////////////////////////////////////////////////////////
+
+class trie;
+class node;
+
+/////////////////////////////////////////////////////
+//类型别名///////////////////////////////////////////
+/////////////////////////////////////////////////////
+
+using layerGroup = vector<node*>;
+using changeUnit = pair<string, string>;
+using tagTransPair = pair<string, string>;
+
+////////////////////////////////////////////////////////
+//全局容器//////////////////////////////////////////////
+////////////////////////////////////////////////////////
+
+extern vector<string> searchResult;    //用于临时存储搜索结果用于展示
+extern map<string, string>tagAndTrans; //标签与翻译映射表
+extern vector<string> favoriateList;   //收藏夹容器
+extern vector<changeUnit> changeRecord;//更改目录容器
+extern int resMinimumSeqNumber;		   //最小序列号,临时存储搜索结果编号
+extern int resMaximumSeqNumber;		   //最大序列号,临时存储搜索结果编号
+extern vector<string> record;		   //历史记录存储容器实例
+extern trie mainTrie;				   //英文Tag存储树
+extern trie commandTrie;			   //指令存储树
+extern trie zhTransTrie;			   //中文翻译存储树,由于char类型限制可能无法实现
+extern bool autoClear;				   //是否处于自动清除模式
+extern bool haveCmdPassedIn;		   //是否有被前向传递至底层的待处理指令
+extern string cmdPassedIn;			   //存储传入指令内容
+extern bool askToQuit;				   //用户是否要求退出
+extern vector<string> allCommand;	   //所有指令
+extern vector<string> cmdSearchRes;	   //存储搜索到的指令
+
 //////////////////////////////////////////////////////////
 //节点类//////////////////////////////////////////////////
 //////////////////////////////////////////////////////////
@@ -35,14 +71,6 @@ public:
 	void markNotEnd();
 };
 
-/////////////////////////////////////////////////////
-//类型别名///////////////////////////////////////////
-/////////////////////////////////////////////////////
-
-using layerGroup = vector<node*>;
-using changeUnit = pair<string, string>;
-using tagTransPair = pair<string, string>;
-
 //////////////////////////////////////////////////////////
 //字典树类////////////////////////////////////////////////
 //////////////////////////////////////////////////////////
@@ -66,27 +94,6 @@ public:
 	void layerClassify(node* nodeIn);
 	//根据layer值对node进行分组
 };
-
-////////////////////////////////////////////////////////
-//全局容器//////////////////////////////////////////////
-////////////////////////////////////////////////////////
-
-extern vector<string> searchResult;    //用于临时存储搜索结果用于展示
-extern map<string, string>tagAndTrans; //标签与翻译映射表
-extern vector<string> favoriateList;   //收藏夹容器
-extern vector<changeUnit> changeRecord;//更改目录容器
-extern int resMinimumSeqNumber;		   //最小序列号,临时存储搜索结果编号
-extern int resMaximumSeqNumber;		   //最大序列号,临时存储搜索结果编号
-extern vector<string> record;		   //历史记录存储容器实例
-extern trie mainTrie;				   //英文Tag存储树
-extern trie commandTrie;			   //指令存储树
-extern trie zhTransTrie;			   //中文翻译存储树,由于char类型限制可能无法实现
-extern bool autoClear;				   //是否处于自动清除模式
-extern bool haveCmdPassedIn;		   //是否有被前向传递至底层的待处理指令
-extern string cmdPassedIn;			   //存储传入指令内容
-extern bool askToQuit;				   //用户是否要求退出
-extern vector<string> allCommand;	   //所有指令
-extern vector<string> cmdSearchRes;	   //存储搜索到的指令
 
 /////////////////////////////////////////////////
 //数据展示函数///////////////////////////////////

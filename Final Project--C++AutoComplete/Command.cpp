@@ -102,7 +102,7 @@ command* analyseCommand(string userCommand)
 	istringstream temp(userCommand);
 	temp >> operation;
 	getline(temp, content);
-	stringToCmd(operationGuess(operation), content);
+	return stringToCmd(operationGuess(operation), content);
 }
 //面向用户输入信息的指令词法分析器
 //内存泄露警告:任何调用该映射器的函数均需要做内存初始化处理
@@ -120,7 +120,7 @@ bool askConfirm() {
 //解析confirm指令的函数.由于很多指令需要confirm确认故对其进行进一步封装化
 //具有歧义环境倾向性
 
-bool sendSubCommand(string expectedCmd, bool executive = true) {
+bool sendSubCommand(string expectedCmd, bool executive) {
 	string userCommand;
 	getline(cin, userCommand);
 	auto temp = lexicalAnalyser(userCommand);
@@ -143,7 +143,7 @@ bool sendSubCommand(string expectedCmd, bool executive = true) {
 //决定将用户输入的指令作为状态指令的后向分支指令处理,还是前向传递至底层解析器处理
 //具有歧义环境倾向性
 
-bool sendSubCommand(bool strict, string expectedCmd, bool executive = true) {
+bool sendSubCommand(bool strict, string expectedCmd, bool executive) {
 	string userCommand;
 	getline(cin, userCommand);
 	auto temp = analyseCommand(userCommand);
@@ -354,7 +354,7 @@ void quitCmd::execute()
 {
 	if (changeRecord.empty()) {
 		cout << "程序已经终止运行.感谢您的使用.\n";
-		_sleep(1500);
+		Sleep(1500);
 		askToQuit = true;
 		return;
 	}

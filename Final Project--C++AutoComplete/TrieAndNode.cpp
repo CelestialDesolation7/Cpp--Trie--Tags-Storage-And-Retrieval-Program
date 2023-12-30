@@ -117,7 +117,7 @@ node* trie::baseSearch(string keyword,node* rootIn)
 }
 //基本搜索函数
 
-void trie::layerSearch(string keyword,int layerIn, vector<string>& searchResultIn=searchResult)
+void trie::layerSearch(string keyword,int layerIn, vector<string>& searchResultIn)
 {
 	auto itertemp = layerCatalog.find(layerIn);
 	if (itertemp == layerCatalog.end())
@@ -188,7 +188,7 @@ node::node(char inputContent, bool isEnd, int layerIn, node* parentNode) {
 	isEndOfWord = isEnd;
 	nodeContent = inputContent;
 	childCount = 0;
-	map<char, node*> next();
+	map<char, node*> next;
 	parent = parentNode;
 }//为insert准备的有参构造函数
 

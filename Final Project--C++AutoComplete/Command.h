@@ -3,6 +3,9 @@
 #include <sstream>
 #include <algorithm>
 #include <cstdio>
+#define byte WindowsHeaderByteAlias
+#include <windows.h>
+#undef byte
 
 using namespace std;
 using commandPair = pair<string, string>;

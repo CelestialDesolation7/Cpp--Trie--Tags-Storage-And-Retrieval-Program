@@ -10,7 +10,7 @@ int main(){
 		<< "       欢迎使用本Tag建议系统.本系统由OLEAM公司提供.祝您跑图愉快.       \n\n"
 		<< "=======================================================================\n";
 	cout << "请稍等,正在构建字典" << endl;
-	
+	return 0;
 	
 	try { readMultiDict(pathToFile, mainTrie); }
 	catch (runtime_error& exception) {
