@@ -56,12 +56,12 @@ public:
 	map<int, layerGroup> layerCatalog; //深度值到对应深度节点群映射的表
 
 	node* baseSearch(string keyword,node* rootIn);
-	void layerSearch(string keyword,int layerIn);
+	void layerSearch(string keyword,int layerIn, vector<string>& searchResultIn = searchResult);
 	void deepSearch(string keyword);
 	string readResult(node* edge);
 	int insert(string wordIn);
 	bool remove(string Deleted);
-	void userRemove(string keyword);
+	void trieRemove(string keyword);
 	trie();
 	void layerClassify(node* nodeIn);
 	//根据layer值对node进行分组
@@ -81,6 +81,12 @@ extern vector<string> record;		   //历史记录存储容器实例
 extern trie mainTrie;				   //英文Tag存储树
 extern trie commandTrie;			   //指令存储树
 extern trie zhTransTrie;			   //中文翻译存储树,由于char类型限制可能无法实现
+extern bool autoClear;				   //是否处于自动清除模式
+extern bool haveCmdPassedIn;		   //是否有被前向传递至底层的待处理指令
+extern string cmdPassedIn;			   //存储传入指令内容
+extern bool askToQuit;				   //用户是否要求退出
+extern vector<string> allCommand;	   //所有指令
+extern vector<string> cmdSearchRes;	   //存储搜索到的指令
 
 /////////////////////////////////////////////////
 //数据展示函数///////////////////////////////////
@@ -88,7 +94,6 @@ extern trie zhTransTrie;			   //中文翻译存储树,由于char类型限制可能无法实现
 
 void showResult();
 void addToFavoriate(string keyword);
-void selectResult(int seqNumber);
 string showTrans(string tag);
 
 ///////////////////////////////////////////////////////
@@ -98,21 +103,24 @@ string showTrans(string tag);
 void readDictionary(ifstream& dictionary, trie trie);
 void saveChange();
 void readMultiDict(string pathIn,trie trie);
+bool checkDictCount(string pathIn);
 
 //////////////////////////////////////////////////////////
 //文件路径定义////////////////////////////////////////////
 //////////////////////////////////////////////////////////
 
-#define mainPath "dictionary.txt"
-#define pathToFile "multiDictionary"
+#define mainPath "dictionary\\dictionary.txt"
+#define pathToFile "dictionary"
 #define stdextension ".txt"
 
 //////////////////////////////////////////////////////////
 //面向用户函数////////////////////////////////////////////
 //////////////////////////////////////////////////////////
 
-void userAddWord(string fullWord,string trans,trie trie);
-void userDeleteWord(string toDelete,trie trie);
+void innerAddWord(string fullWord,string trans,trie trie);
+void innerDeleteWord(string fullWord,trie trie);
+bool askConfirm();
+void showChange();
 
 //////////////////////////////////////////////////////////
 //异常定义////////////////////////////////////////////////

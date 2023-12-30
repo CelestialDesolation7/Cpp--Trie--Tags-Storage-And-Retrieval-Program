@@ -1,15 +1,18 @@
 #include "NodeAndTrie.h"
+#include "Command.h"
 
 //////////////////////////////////////////////////////////////////////////
 //trie类的实现////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
 
 int trie::insert(string wordIn) {
+	bool newNodeCreated = false;
 	node* current = &this->root;
 	for (char c : wordIn) {
 		if (current->whereKey(c) == nullptr) 
 		{
 			node* temp=new node(c,0,current->layer+1,current);
+			if (!newNodeCreated)newNodeCreated = true;
 			layerClassify(temp);
 			current->next.insert(make_pair(c,temp));
 			current->markNotEnd();
@@ -25,7 +28,7 @@ int trie::insert(string wordIn) {
 	}
 	//循环结束,这代表current指向了当前单词末尾所在节点,对其标记
 	current->markEnd();
-	count++;
+	if(newNodeCreated)count++;
 	return count;
 }
 //插入单词函数
@@ -90,7 +93,7 @@ bool trie::remove(string deleted)
 }
 //基本移除函数.需要注意:本函数仅允许用户输入完整的关键词再删除
 
-void trie::userRemove(string keyword)
+void trie::trieRemove(string keyword)
 {
 	bool success = remove(keyword);
 	if (success) {
@@ -100,7 +103,6 @@ void trie::userRemove(string keyword)
 	else cout << "没有在词库中找到标签 " << keyword << " 请检查您的输入是否正确." << endl;
 }
 //面向用户的移除函数
-//(有文本输出)
 
 node* trie::baseSearch(string keyword,node* rootIn)
 {
@@ -115,7 +117,7 @@ node* trie::baseSearch(string keyword,node* rootIn)
 }
 //基本搜索函数
 
-void trie::layerSearch(string keyword,int layerIn)
+void trie::layerSearch(string keyword,int layerIn, vector<string>& searchResultIn=searchResult)
 {
 	auto itertemp = layerCatalog.find(layerIn);
 	if (itertemp == layerCatalog.end())
@@ -125,7 +127,7 @@ void trie::layerSearch(string keyword,int layerIn)
 	{
 		string tempResult=readResult(baseSearch(keyword, tempNodePtr));
 		if(!tempResult.empty())
-		searchResult.push_back(tempResult);
+		searchResultIn.push_back(tempResult);
 	}
 	//对指定层的每个节点进行基本搜索(baseSearch)并将结果发送至结果存储区
 }
@@ -234,7 +236,8 @@ void showResult()
 		cout << "很抱歉,词库中没有与您的输入匹配的Tag" << endl;
 		return;
 	}
-	cout << "根据您输入的关键词,给出如下补全建议\n";
+	cout << "根据您输入的关键词,给出如下补全建议\n"
+		 << "==========================================\n";
 	stable_sort(searchResult.begin(), searchResult.end());
 	int seqNumber = 1;
 	for (string s : searchResult) {
@@ -242,27 +245,16 @@ void showResult()
 			<< "      " << showTrans(s) << endl;
 		seqNumber++;
 	}
+	cout << "==========================================\n";
 	resMaximumSeqNumber = seqNumber - 1;
-	cout << "如果希望保存某个搜索记录,请输入其对应数字并按Enter" << endl;
+	cout << "如果希望收藏某个搜索记录,请使用Select指令并在空格后输入结果对应数字" << endl;
 }
+//展示结果函数
 
 void addToFavoriate(string keyword) {
 	favoriateList.push_back(keyword);
 }
 //将词汇加入收藏夹
-
-void selectResult(int seqNumber) {
-gate0:
-	if (!isdigit(seqNumber) && seqNumber > 0 && seqNumber >= resMinimumSeqNumber && seqNumber <= resMaximumSeqNumber)
-	{
-		cout << "非法输入.请输入正整数" << endl;
-		goto gate0;
-		favoriateList.push_back(searchResult[seqNumber - 1]);
-	}
-}
-//选择搜索结果
-// (有文本输出)
-// (未完成)
 
 void readDictionary(ifstream& dictionary, trie trie)
 {
@@ -278,15 +270,33 @@ void readDictionary(ifstream& dictionary, trie trie)
 }
 //将字典中的内容按行读入
 
-void userAddWord(string fullWord, string trans, trie trie)
+bool checkDictCount(string pathIn)
+{
+	int dictCount = 0;
+	filesystem::path dictRepository(pathIn);
+	for (auto& entry : filesystem::directory_iterator(dictRepository)) {
+		if (entry.path().extension() == stdextension)
+			dictCount++;
+	}
+	if (dictCount == 1)return true;
+	return false;
+}
+//检查字典库目录内是否仅存在一个字典文件
+
+void innerAddWord(string fullWord, string trans, trie trie)
 {
 	trie.insert(fullWord);
 	changeRecord.push_back(make_pair(fullWord, "添加"));
 	tagAndTrans.insert(make_pair(fullWord, trans));
-	cout << "标签 " << fullWord << " 已被加入词库" << endl;
 }
-//面向用户的删除函数
-//(有文本输出)
+//内部添加函数
+
+void innerDeleteWord(string fullWord, trie trie) {
+	trie.trieRemove(fullWord);
+	changeRecord.push_back(make_pair(fullWord, "删除"));
+	tagAndTrans.erase(fullWord);
+}
+//内部删除函数
 
 string showTrans(string tag)
 {
@@ -296,18 +306,6 @@ string showTrans(string tag)
 	return temp->second;
 }
 //获得一个Tag的翻译
-
-void userDeleteWord(string toDelete, trie trie) {
-	if (trie.remove(toDelete))
-	{
-		cout << "词汇 " << toDelete << " 已成功删除" << endl;
-		changeRecord.push_back(make_pair(toDelete, "删除"));
-		tagAndTrans.erase(toDelete);
-	}
-	else cout << "删除失败,词库中不存在这个词,请检查输入正确性" << endl;
-}
-//删除词汇函数
-// (有文本输出)
 
 void saveChange()
 {
@@ -343,10 +341,19 @@ void readMultiDict(string pathIn, trie trie)
 	//以上循环旨在判断是否存在有效文件
 	for (const auto& eachEntry : iteratorIn) {
 		//end()全局函数接收上述目录时返回尾后迭代器
-		if (eachEntry.is_regular_file()) {
+		if (eachEntry.path().extension() == stdextension) {
 			ifstream fileNow(eachEntry.path());
 			readDictionary(fileNow, trie);
+			fileNow.close();
 		}
 	}
 }
 //进行多字典文件整合化读取的函数
+
+void showChange() {
+	for (auto& changeUnitNow : changeRecord) {
+		cout << changeUnitNow.first <<"      "
+			 << changeUnitNow.second << endl;
+	}
+}
+//展示更改历史记录的函数
