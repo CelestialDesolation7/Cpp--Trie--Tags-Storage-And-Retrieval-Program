@@ -67,7 +67,7 @@ command* stringToCmd(string fullCmd,string content)
 		return new countCmd(content);
 	else if (fullCmd == "delete")
 		return new deleteCmd(content);
-	else if (fullCmd == "favotiate")
+	else if (fullCmd == "favoriate")
 		return new favoriateCmd(content);
 	else if (fullCmd == "help")
 		return new helpCmd(content);
@@ -334,6 +334,10 @@ void searchCmd::execute()
 	resMaximumSeqNumber = 0;
 	resMinimumSeqNumber = 1;
 	searchResult.clear();
+	if (content.empty()) {
+		cout << "您没有输入要搜索的关键词.请重试.\n";
+		return;
+	}
 	mainTrie.deepSearch(this->content);
 	showResult();
 }
