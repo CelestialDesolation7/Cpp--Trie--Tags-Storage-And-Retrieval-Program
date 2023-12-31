@@ -64,9 +64,11 @@ bool trie::remove(string deleted)
 	vector<node*> tempSeed = baseSearch(deleted, &this->root);
 	//通过根搜索找到希望删除的词汇
 	if (tempSeed.size()!=1)
-		return 0;
+		return false;
 	//搜索无效,向上传递false指示
 	node* tempPtr = tempSeed[0];
+	if (!tempPtr->isEndOfWord)
+		return false;
 	node* nextToDelete = tempPtr->parent;
 	//获取待删除节点的指针
 	while (tempPtr->childCount == 0) {
@@ -77,20 +79,22 @@ bool trie::remove(string deleted)
 			int layerNow = tempPtr->layer;
 			//记录半删除态节点的层数
 			auto layerGroupPairNow = this->layerCatalog.find(layerNow);
-			//记录指向半删除态节点的层数对应的<层数,层节点群存储器>二元组的迭代器(指针)
-			auto& layerGroupNow = layerGroupPairNow->second;
+			//记录指向"半删除态节点的层数对应的"<层数,层节点群存储器>二元组的迭代器(指针)
+			layerGroup& layerGroupNow = layerGroupPairNow->second;
 			//获取指向上述二元组的第二者(即层节点群存储器)的引用名
 			nextToDelete->next.erase(tempPtr->readContent());
 			//在待删除节点的映射性子节点表中,清除指向当前半删除态节点的<字符,节点指针>二元组
 			auto iterTemp = find(nextToDelete->allChild.begin(), nextToDelete->allChild.end(), tempPtr);
 			//在待删除节点的非映射性子节点表中,找到并清除指向当前半删除态节点的节点指针
 			nextToDelete->allChild.erase(iterTemp);
-			for (auto nodePtrIterator = layerGroupNow.begin(); nodePtrIterator < layerGroupNow.end();nodePtrIterator++) {
-				//遍历上述存储器,找到其中存储的"指向当前工作对象--半删除态节点"的指针
-				if (*nodePtrIterator == tempPtr)layerGroupNow.erase(nodePtrIterator);
-				//将该指针删除,随后循环短路
-				break;
-			}
+				for (auto nodePtrIterator = layerGroupNow.begin(); nodePtrIterator != layerGroupNow.end();nodePtrIterator++) {
+				//遍历层节点群存储器,找到其中存储的"指向当前半删除态节点(工作对象)"的指针
+					if (*nodePtrIterator == tempPtr) {
+						layerGroupNow.erase(nodePtrIterator);
+						//将该指针从其中删除,随后循环短路
+						break;
+					}
+				}
 			//此时不再有永久性指针指向当前工作对象,避免指针悬空
 			delete tempPtr;
 			nextToDelete->childCount--;
@@ -104,23 +108,25 @@ bool trie::remove(string deleted)
 			}	//警告:如果意图用if语句执行的复合部分用分号分割而没有用大括号封装,不会报错
 				//如果发现一个层节点群存储器已空,则将其删除并削减最大层数
 		}
-		else return 1;
+		else return true;
 
 		tempPtr = nextToDelete;
 		nextToDelete = nextToDelete->parent;
 	}
-	return 1;
+	return true;
 }
 //基本移除函数.需要注意:本函数仅允许用户输入完整的关键词再删除
 
-void trie::trieRemove(string keyword)
+bool trie::trieRemove(string keyword)
 {
 	bool success = remove(keyword);
 	if (success) {
 		cout << "标签 " << keyword << " 已被成功移除." << endl;
 		count--;
+		return true;
 	}
 	else cout << "没有在词库中找到标签 " << keyword << " 请检查您的输入是否正确." << endl;
+	return false;
 }
 //面向用户的移除函数
 
@@ -274,6 +280,8 @@ void showResult()
 	cout << "根据您输入的关键词,给出如下补全建议\n"
 		 << "==========================================\n";
 	stable_sort(searchResult.begin(), searchResult.end());
+	auto last=unique(searchResult.begin(), searchResult.end());
+	searchResult.erase(last, searchResult.end());
 	int seqNumber = 1;
 	for (string s : searchResult) {
 		cout << "第" << seqNumber << "个建议" << "      " << s
@@ -327,7 +335,7 @@ void innerAddWord(string fullWord, string trans, trie& trie)
 //内部添加函数
 
 void innerDeleteWord(string fullWord, trie& trie) {
-	trie.trieRemove(fullWord);
+	if(!trie.trieRemove(fullWord))return;
 	changeRecord.push_back(make_pair(fullWord, "删除"));
 	tagAndTrans.erase(fullWord);
 }

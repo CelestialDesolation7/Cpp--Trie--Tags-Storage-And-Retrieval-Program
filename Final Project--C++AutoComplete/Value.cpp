@@ -28,7 +28,6 @@ vector<string> favoriateList;			//收藏夹容器
 vector<changeUnit> changeRecord;		//更改目录容器
 int resMinimumSeqNumber = 1;		    //最小序列号,临时存储搜索结果编号
 int resMaximumSeqNumber = 0;		    //最大序列号,临时存储搜索结果编号
-vector<string> record;					//历史记录存储容器实例
 trie mainTrie;							//英文Tag存储树
 trie commandTrie;						//指令存储树
 trie zhTransTrie;						//中文翻译存储树,由于char类型限制可能无法实现

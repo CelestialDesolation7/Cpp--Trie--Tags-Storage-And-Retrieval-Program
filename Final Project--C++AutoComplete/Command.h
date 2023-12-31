@@ -3,6 +3,7 @@
 #include <sstream>
 #include <algorithm>
 #include <cstdio>
+#include <regex>
 #define byte WindowsHeaderByteAlias
 #include <windows.h>
 #undef byte
@@ -158,3 +159,4 @@ command* stringToCmd(string fullCmd,string content);
 commandPair lexicalAnalyser(string commandIn);
 bool sendSubCommand(bool strict,string expectedCmd, bool executive = true);
 bool sendSubCommand(string expectedCmd,bool executed = true);
+void clearSpaceSuffix(string& str);

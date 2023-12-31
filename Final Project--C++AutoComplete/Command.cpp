@@ -59,6 +59,8 @@ command* stringToCmd(string fullCmd,string content)
 		return nullptr;
 	else if (fullCmd == "add")
 		return new addCmd(content);
+	else if (fullCmd == "ambiguity")
+		return new ambiguityCmd(content);
 	else if (fullCmd == "clear")
 		return new clearCmd(content);
 	else if (fullCmd == "confirm")
@@ -105,6 +107,7 @@ command* analyseCommand(string userCommand)
 	temp >> operation;
 	getline(temp>>ws, content);
 	operation = operationGuess(operation);
+	if(operation!="ambiguity")
 	cmdSearchRes.clear();
 	return stringToCmd(operation, content);
 }
@@ -148,21 +151,30 @@ bool sendSubCommand(string expectedCmd, bool executive) {
 //具有歧义环境倾向性
 
 bool sendSubCommand(bool strict, string expectedCmd, bool executive) {
-	string userCommand;
-	getline(cin, userCommand);
-	auto temp = analyseCommand(userCommand);
-	if (temp->operationClass == expectedCmd) {
+	string userCommand2;
+	getline(cin, userCommand2);
+	auto temp = analyseCommand(userCommand2);
+	if (temp->readClass() == expectedCmd) {
 		if (executive)temp->execute();
 		delete temp;
 		return false;
 	}
 	haveCmdPassedIn = true;
-	cmdPassedIn = userCommand;
+	cmdPassedIn = userCommand2;
 	delete temp;
 	return true;
 }
 //硬判定指令转发器
 //具有歧义环境中立性
+
+void clearSpaceSuffix(string& str)
+{
+	for (auto strIter = str.rbegin(); strIter != str.rend(); strIter++) {
+		if (*strIter == ' ')str.erase(strIter.base() - 1);
+		else return;
+	}
+}
+//清除空格后缀函数
 
 //////////////////////////////////////////////////////////////
 //指令实现函数////////////////////////////////////////////////
@@ -193,23 +205,26 @@ void addCmd::execute()
 		cout << "您没有输入想要添加的Tag.请重试.\n";
 	}
 	else {
-		int chineseIndex = 0;
-		bool havetrans = 0;
+		bool havetrans = false;
 		string tag, trans;
-		for (auto contentElement : this->content) {
-			if (isalpha(contentElement) || isspace(contentElement))
-				chineseIndex++;
-			else break;
-		}
+
+		//////////////////////////////////////////////////////////////
+		//利用Reguler Rxpression进行中文字符检查
+		smatch match;
+		regex chineseRegex(u8"[\u4e00-\u9fa5]");
+		int chineseIndex = regex_search(content, match, chineseRegex) ? match.position() : string::npos;
+		//////////////////////////////////////////////////////////////
 		if (chineseIndex == 0)
 			cout << "您仅输入了中文没有输入英文,或者将中英文的顺序写反了,请重试.\n";
 		else {
 			tag = this->content.substr(0, chineseIndex);
-			havetrans = (!chineseIndex == this->content.size()-1);
-			//如果第一个非英文字符索引不是字符串末尾位置索引
-			if(!havetrans)
+			havetrans = (chineseIndex != string::npos);
+			//第一个中文字符的索引被设置无效化标记
+			if(havetrans)
 			trans = this->content.substr(chineseIndex);
 		}
+		clearSpaceSuffix(tag);
+		clearSpaceSuffix(trans);
 		cout << "您确定要添加 " << tag;
 
 		if(havetrans)
@@ -245,7 +260,7 @@ void favoriateCmd::execute(){
 	cout << "                 收藏夹\n"
 		<< "==========================================\n";
 	int seqNumber = 1;
-	for (string s : searchResult) {
+	for (string s : favoriateList) {
 		cout << "第" << seqNumber << "个" << "      " << s
 			<< "      " << showTrans(s) << endl;
 		seqNumber++;

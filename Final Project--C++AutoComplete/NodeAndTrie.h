@@ -33,10 +33,9 @@ using tagTransPair = pair<string, string>;
 extern vector<string> searchResult;    //用于临时存储搜索结果用于展示
 extern map<string, string>tagAndTrans; //标签与翻译映射表
 extern vector<string> favoriateList;   //收藏夹容器
-extern vector<changeUnit> changeRecord;//更改目录容器
+extern vector<changeUnit> changeRecord;//更改记录容器
 extern int resMinimumSeqNumber;		   //最小序列号,临时存储搜索结果编号
 extern int resMaximumSeqNumber;		   //最大序列号,临时存储搜索结果编号
-extern vector<string> record;		   //历史记录存储容器实例
 extern trie mainTrie;				   //英文Tag存储树
 extern trie commandTrie;			   //指令存储树
 extern trie zhTransTrie;			   //中文翻译存储树,由于char类型限制可能无法实现
@@ -58,10 +57,11 @@ public:
 	int layer; //层数
 	node* parent;
 	map<char, node*> next; //子节点表
-	bool isEndOfWord; //结尾标记
 	vector<node*> allChild;
+	bool isEndOfWord; //结尾标记
 
 	//状态检定思想:建立处于对象操作环境中时的常时状态变化需求监测行为模式
+
 	node();
 	node(char inputContent, bool isEnd, int layerIn,node* parentNode);
 	node* findChild(char c);
@@ -86,14 +86,14 @@ public:
 	int count;//词汇数
 	map<int, layerGroup> layerCatalog; //深度值到对应深度节点群映射的表
 
+	trie();
 	vector<node*> baseSearch(string keyword,node* rootIn);
 	void layerSearch(string keyword,int layerIn, vector<string>& searchResultIn = searchResult);
 	void deepSearch(string keyword);
 	string readResult(node* edge);
 	int insert(string wordIn);
 	bool remove(string Deleted);
-	void trieRemove(string keyword);
-	trie();
+	bool trieRemove(string keyword);
 	void layerClassify(node* nodeIn);
 	
 	//根据layer值对node进行分组
@@ -121,7 +121,7 @@ bool checkDictCount(string pathIn);
 //////////////////////////////////////////////////////////
 
 #define mainPath "dictionary\\dictionary.txt"
-#define pathToFile "D:\\Project\\Final Project--C++AutoComplete\\Final Project--C++AutoComplete\\Dictionary"
+#define pathToFile "Dictionary"
 #define stdextension ".txt"
 
 //////////////////////////////////////////////////////////

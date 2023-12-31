@@ -16,12 +16,12 @@ int main(){
 		cerr << exception.what() << endl;
 		return 1;
 	}
-
+	
 	for (auto& temp : allCommand)
 		commandTrie.insert(temp);
 	cout << "字典构建完成,现在您可以开始使用.如果需要操作指导,请使用help指令." << endl
 		 << "此处,\"使用指令\"指的是输入指令文本后按Enter键" << endl;
-	
+
 	string userCommand;
 	while (true) {
 		if (haveCmdPassedIn) {
