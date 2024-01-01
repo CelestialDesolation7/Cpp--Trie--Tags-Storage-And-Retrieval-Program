@@ -154,7 +154,7 @@ bool sendSubCommand(bool strict, string expectedCmd, bool executive) {
 	string userCommand2;
 	getline(cin, userCommand2);
 	auto temp = analyseCommand(userCommand2);
-	if (temp->readClass() == expectedCmd) {
+	if (temp != nullptr &&temp->readClass() == expectedCmd) {
 		if (executive)temp->execute();
 		delete temp;
 		return false;

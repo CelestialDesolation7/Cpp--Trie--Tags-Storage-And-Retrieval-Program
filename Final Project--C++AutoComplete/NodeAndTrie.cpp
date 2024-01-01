@@ -253,7 +253,7 @@ node* node::whereKey(char key) {
 		//习惯:对复杂数据类型进行遍历且不进行修改时使用引用
 		//以避免牵扯到多个复制构造函数引发错误或浪费
 	{
-		if (nextpair.first==key)
+		if (nextpair.first == key)
 			return nextpair.second;
 	}
 	return nullptr;
