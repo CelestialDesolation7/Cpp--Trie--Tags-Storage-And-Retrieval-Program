@@ -1,0 +1,83 @@
+socks	袜子
+kneehighs (covers the feet and legs up to the knees)	高膝袜（覆盖脚部至膝盖）
+over-kneehighs (covers the leg from the foot up to just above the knees)	超高膝袜（覆盖脚部至膝盖以上）
+thighhighs (covers the leg from the foot up to the mid-thighs)	大腿高袜（覆盖脚部至大腿中部）
+pantyhose (covers from the waist to the toes)	连裤袜（覆盖从腰部到脚趾）
+leggings (like pantyhose, but doesn't cover the feet)	打底裤（类似连裤袜，但不覆盖脚部）
+detached leggings (more like footless thighhighs)	分离式打底裤（更像是无脚大腿高袜）
+Multiple Colors	多种颜色
+gradient legwear	渐变色腿部服饰
+multicolored legwear	多色腿部服饰
+two-tone legwear	双色腿部服饰
+Pattern	图案
+american flag legwear	美国国旗腿部服饰
+argyle legwear	菱形格子腿部服饰
+camouflage legwear	迷彩腿部服饰
+checkered legwear	方格腿部服饰
+gingham legwear	格子纹腿部服饰
+plaid legwear	格子腿部服饰
+polka dot legwear	波点腿部服饰
+print legwear	印花腿部服饰
+rainbow legwear	彩虹腿部服饰
+striped legwear	条纹腿部服饰
+diagonal-striped legwear	斜条纹腿部服饰
+vertical-striped legwear	竖条纹腿部服饰
+pinstripe legwear	细条纹腿部服饰
+animal ear legwear	动物耳朵腿部服饰
+bat legwear	蝙蝠腿部服饰
+bear band legwear	熊形带子腿部服饰
+rabbit ear legwear	兔耳朵腿部服饰
+cat ear legwear	猫耳朵腿部服饰
+horn band legwear	角形带子腿部服饰
+aran legwear	阿兰腿部服饰
+armored legwear	盔甲式腿部服饰
+bow legwear	蝴蝶结腿部服饰
+cross-laced legwear	交叉绑带腿部服饰
+fishnet legwear	鱼网腿部服饰
+fluffy legwear	蓬松腿部服饰
+frilled legwear	褶边腿部服饰
+knit legwear	针织腿部服饰
+lace legwear	蕾丝腿部服饰
+lace-up legwear	系带腿部服饰
+latex legwear	乳胶腿部服饰
+legwear bell	腿部铃铛
+o-ring legwear	O型环腿部服饰
+pleated legwear	百褶腿部服饰
+ribbed legwear	条纹腿部服饰
+ribbon legwear	丝带腿部服饰
+seamed legwear	接缝腿部服饰
+back-seamed legwear	后缝腿部服饰
+front-seamed legwear	前缝腿部服饰
+side-seamed legwear	侧缝腿部服饰
+see-through legwear	透视腿部服饰
+shiny legwear	闪亮腿部服饰
+side-tie legwear	侧绑腿部服饰
+spiked legwear	带刺腿部服饰
+studded legwear	镶钉腿部服饰
+toeless legwear	无趾腿部服饰
+bridal legwear	新娘腿部服饰
+stirrup legwear	马镫腿部服饰
+trimmed legwear	镶边腿部服饰
+fur-trimmed legwear	毛皮镶边腿部服饰
+lace-trimmed legwear	蕾丝镶边腿部服饰
+ribbon-trimmed legwear	丝带镶边腿部服饰
+zipper legwear	拉链腿部服饰
+adjusting legwear	调整腿部服饰
+holding legwear	握住腿部服饰
+pulling off legwear	脱下腿部服饰
+putting on legwear	穿上腿部服饰
+removing legwear	移除腿部服饰
+alternate legwear	交替腿部服饰
+uneven legwear	不均匀腿部服饰
+dirty legwear	脏腿部服饰
+in legwear	穿着腿部服饰
+layered legwear	层叠腿部服饰
+legwear past ankles	超过脚踝的腿部服饰
+unworn legwear	未穿腿部服饰
+pantyhose under shorts	短裤下的连裤袜
+mismatched legwear	不匹配的腿部服饰
+no legwear	无腿部服饰
+taut legwear	紧身腿部服饰
+torn legwear	破腿部服饰
+wet legwear	湿腿部服饰
+thighband pantyhose	大腿带连裤袜

@@ -1,0 +1,254 @@
+crown	王冠
+hat	帽子
+helmet	头盔
+aqua headwear	水蓝色头饰
+black headwear	黑色头饰
+blue headwear	蓝色头饰
+brown headwear	棕色头饰
+green headwear	绿色头饰
+grey headwear	灰色头饰
+orange headwear	橙色头饰
+pink headwear	粉色头饰
+purple headwear	紫色头饰
+red headwear	红色头饰
+white headwear	白色头饰
+yellow headwear	黄色头饰
+Hats	帽子
+With visor	有遮阳板的
+baseball cap	棒球帽
+budenovka	布登诺夫卡帽
+cabbie hat	出租车司机帽
+deerstalker	猎鹿帽
+kepi	凯皮帽
+M43 field cap WWII-era German military cap	M43德军野战帽（二战时期）
+Mao cap	毛主席帽
+field cap	野战帽
+peaked cap	军用便帽
+rogatywka Polish four-pointed military cap	罗加提夫卡（波兰四角军帽）
+shako cap marching band hat	夏科帽（军乐队帽）
+With brim	有边缘的
+bicorne	双角帽
+boater hat	平顶草帽
+bowler hat	硬顶圆帽
+bucket hat	渔夫帽
+campaign hat	军事竞选帽
+cloche hat	钟形帽
+cowboy hat	牛仔帽
+straw hat	草帽
+ajirogasa	编织草帽
+amigasa	网织草帽
+ayaigasa	彩绘伞
+ichimegasa	一枚笠
+roningasa	浪人帽
+sandogasa	三斗笠
+torioigasa	鸟追伞
+rice hat	稻草帽
+fascinator	轻巧帽
+"fedora,actually a trilby,a fedora has a circular brim that curves upwards everywhere, never downwards"	软呢帽，实为特里比帽
+female service cap	女性制服帽
+flat cap	平顶帽
+gat korean traditional hat	韩国传统帽（加特帽）
+jingasa	甲冑帽
+mob cap	民众帽
+pirate hat	海盗帽
+pith helmet	硬质头盔
+porkpie hat	波克派帽
+shampoo hat	洗发帽
+sombrero	墨西哥宽边帽
+sun hat	阳光帽
+top hat	高顶帽
+mini top hat	迷你高顶帽
+tricorne	三角帽
+witch hat	巫师帽
+mini witch hat	迷你巫师帽
+wizard hat	巫师帽
+With ear flaps	带耳瓣的帽子
+deerstalker	猎鹿帽
+budenovka	布登诺夫卡帽
+papakha	帕帕哈帽
+ushanka	毛皮耳帽
+Brimless	无檐帽
+bashlik	巴什利克帽
+dixie cup hat	水手帽
+dunce cap	笨蛋帽
+chef hat	厨师帽
+flat top chef hat	平顶厨师帽
+toque blanche	白色厨师帽
+beret	贝雷帽
+beanie	毛线帽
+coif	头巾
+fez hat	费兹帽
+fur hat	毛皮帽
+bearskin cap	熊皮帽
+papakha	帕帕哈帽
+ushanka	乌山卡帽
+garrison cap	营房帽
+hennin	尖顶女帽
+kippah	犹太小帽
+mian guan	冕冠
+mitre	主教冠
+mortarboard collage graduation hat	学士帽
+nightcap	睡帽
+nurse cap	护士帽
+party hat	派对帽
+pillbox hat	药盒帽
+qing guanmao	清代官帽
+sailor hat	水手帽
+sajkaca	塞尔维亚传统帽
+santa hat	圣诞老人帽
+mini santa hat	迷你圣诞老人帽
+songkok	马来帽
+tam o' shanter	苏格兰休闲帽
+tate eboshi	立烏帽
+tokin hat	托金帽
+tsunokakushi	婚礼头纱
+Misc	杂项
+animal hat	动物帽
+hat with ears	带耳朵的帽子
+deviruchi hat	德维鲁奇帽
+bear hat	熊帽
+rabbit hat	兔帽
+cat hat	猫帽
+dog hat	狗帽
+fox hat	狐狸帽
+pelt	皮毛帽
+penguin hat	企鹅帽
+wolf hat	狼帽
+eggshell hat	蛋壳帽
+pumpkin hat	南瓜帽
+Helmets	头盔类
+adrian helmet	阿德里安头盔
+Altyn helmet	阿尔廷头盔
+American football helmet	美式橄榄球头盔
+animal ears helmet	动物耳朵头盔
+baseball helmet	棒球头盔
+bicycle helmet	自行车头盔
+brodie helmet	布罗迪头盔
+diving helmet	潜水头盔
+dragoon helmet	龙骑兵头盔
+fishbowl helmet	鱼缸头盔
+hard hat	安全帽
+headlamp	头灯
+helm	头盔
+horned helmet	角头盔
+kabuto	武士头盔
+kettle helm	壶盔
+M1 helmet	M1头盔
+motorcycle helmet	摩托车头盔
+Pickelhaube	尖顶头盔
+pilot helmet	飞行员头盔
+pith helmet	硬质头盔
+sallet	沙莱特头盔
+space helmet	太空头盔
+Stahlhelm	斯塔尔海姆头盔
+tank helmet	坦克头盔
+winged helmet	翼头盔
+Crowns	王冠类
+circlet	小环冠
+diadem	冕
+mian guan	冕冠
+mini crown	迷你王冠
+saishi	赛师冠
+tiara	冠
+Other	其他
+aviator cap	飞行帽
+balaclava	紧身帽
+bandana	头巾
+bonnet	童帽
+dalachi	达拉奇帽
+habit	习惯帽
+head scarf	头巾
+hijab	希贾布
+jester cap	小丑帽
+keffiyeh	阿拉伯头巾
+okosozukin	欧克索兹金帽
+shower cap	淋浴帽
+shufa guan	书法冠
+visor cap	遮阳帽
+veil	面纱
+object on head	头上物品
+"bowl hat should probably be rename
+ to ""bowl on head"""	“碗帽”应该更名为“头上的碗”
+bloomers on head	头上的灯笼裤
+book on head	头上的书
+bra on head	头上的胸罩
+bucket on head	头上的桶
+food on head	头上的食物
+panties on head	头上的内裤
+traffic cone on head	头上的交通锥
+Non-specific styles	非特定风格
+camouflage headwear	迷彩头饰
+checkered headwear	格子头饰
+frilled hat	褶边帽
+military hat	军帽
+mini hat	迷你帽
+multicolored headwear	多彩头饰
+police hat	警帽
+print headwear	印花头饰
+school hat	校帽
+straw hat	草帽
+Actions / states	行为/状态
+adjusting headwear	调整头饰
+backwards hat	倒戴帽
+sideways hat	斜戴帽
+unworn hat	未戴帽
+hand on headwear	手在头饰上
+hands on headwear	双手在头饰上
+hat basket	帽篮
+hat loss	丢帽
+hat on chest	胸前的帽子
+hat over eyes	遮眼的帽子
+hat over one eye	遮住一只眼的帽子
+unworn hat	没有穿的帽子
+hat tip	帽子的尖端
+unworn headwear	未戴的头饰
+unworn helmet	未戴的头盔
+holding hat	持帽
+holding helmet	持头盔
+torn hat	破帽
+no headwear	无头饰
+putting on headwear	戴头饰
+removing helmet	取下头盔
+tilted headwear	倾斜的头饰
+Accessories	配饰
+chin strap	下巴带
+hat bow	帽子蝴蝶结
+hat feather	帽子羽毛
+hat flower	帽子花
+hat ornament	帽饰
+anchor hat ornament	锚形帽饰
+butterfly hat ornament	蝴蝶形帽饰
+character hat ornament	人物帽饰
+crescent hat ornament	新月形帽饰
+dolphin hat ornament	海豚形帽饰
+food-themed hat ornament	食物主题帽饰
+fruit hat ornament	水果帽饰
+grape hat ornament	葡萄帽饰
+peach hat ornament	桃子帽饰
+pumpkin hat ornament	南瓜帽饰
+gear hat ornament	齿轮帽饰
+heart hat ornament	心形帽饰
+holly hat ornament	冬青帽饰
+jack-o'-lantern hat ornament	南瓜灯帽饰
+leaf hat ornament	叶形帽饰
+palette hat ornament	调色板帽饰
+star hat ornament	星形帽饰
+skull hat ornament	骷髅帽饰
+tassel hat ornament	流苏帽饰
+hat ribbon	帽带
+hat with ears	带耳朵的帽子
+Not headwear	非头饰
+hair bow	发饰
+hair ribbon	发带
+hairband	发带
+headband	头带
+forehead protector	额头保护器
+sweatband	汗带
+hachimaki	额带
+nejiri hachimaki	扭曲头巾
+mongkhon	蒙空（泰拳头带）
+headdress	头饰
+maid headdress	女仆头饰
+native american headdress	美洲原住民头饰
+warbonnet	战帽
+veil	面纱
