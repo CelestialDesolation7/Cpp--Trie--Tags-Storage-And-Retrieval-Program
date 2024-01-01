@@ -153,10 +153,12 @@ public:
 //歧义处理指令,不面向用户//
 
 command* analyseCommand(string userCommand);
-static bool charEqual(char c1, char c2);
+bool charEqual(char c1, char c2);
 string operationGuess(string partialCmd);
 command* stringToCmd(string fullCmd,string content);
 commandPair lexicalAnalyser(string commandIn);
 bool sendSubCommand(bool strict,string expectedCmd, bool executive = true);
 bool sendSubCommand(string expectedCmd,bool executed = true);
 void clearSpaceSuffix(string& str);
+bool cmdMultiMatch(string expectedCmd,bool executive = true);
+bool operationEqual(string strIn, string expectedStr);

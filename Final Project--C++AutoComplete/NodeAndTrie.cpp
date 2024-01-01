@@ -35,7 +35,9 @@ int trie::insert(string wordIn) {
 		}
 	}
 	//循环结束,这代表current指向了当前单词末尾所在节点,对其标记
+	if(current->childCount==0)
 	current->markEnd();
+	
 	if(newNodeCreated)this->count++;
 	return count;
 }
@@ -88,7 +90,8 @@ bool trie::remove(string deleted)
 			//在待删除节点的非映射性子节点表中,找到并清除指向当前半删除态节点的节点指针
 			nextToDelete->allChild.erase(iterTemp);
 				for (auto nodePtrIterator = layerGroupNow.begin(); nodePtrIterator != layerGroupNow.end();nodePtrIterator++) {
-				//遍历层节点群存储器,找到其中存储的"指向当前半删除态节点(工作对象)"的指针
+					//注意for循环第二表达式是循环短路条件
+					//遍历层节点群存储器,找到其中存储的"指向当前半删除态节点(工作对象)"的指针
 					if (*nodePtrIterator == tempPtr) {
 						layerGroupNow.erase(nodePtrIterator);
 						//将该指针从其中删除,随后循环短路
@@ -145,12 +148,15 @@ vector<node*> trie::baseSearch(string keyword,node* rootIn)
 		resultSeed.push_back(current);
 		return resultSeed;
 	}
+	//如果当前节点是端,则不会存在更多匹配项.直接返回所有结果种子.
+	// 当前尚未引入自语义化特征
+	//如果当前节点具有自语义化特征,则加入搜索结果种子列表
 	function<void(node*)> findAllSeed = [&resultSeed,&findAllSeed](node* rootTemp) {
 		for (node* childNow : rootTemp->allChild) {
 			if (childNow->isEndOfWord)resultSeed.push_back(childNow);
-			else findAllSeed(childNow);}
+			else { findAllSeed(childNow); }
+		}
 		};
-		//如果当前节点是端,则不会存在更多匹配项.直接返回所有结果种子.
 	//注意:此处使用Lambda表达式递归调用自身搜索全部端点
 	findAllSeed(current);
 	return resultSeed;
@@ -247,7 +253,7 @@ node* node::whereKey(char key) {
 		//习惯:对复杂数据类型进行遍历且不进行修改时使用引用
 		//以避免牵扯到多个复制构造函数引发错误或浪费
 	{
-		if (nextpair.first == key)
+		if (nextpair.first==key)
 			return nextpair.second;
 	}
 	return nullptr;
@@ -259,8 +265,7 @@ void node::markEnd() {
 }
 //某个节点将自身标记为结尾的函数
 
-void node::markNotEnd()
-{
+void node::markNotEnd(){
 	if (this->isEndOfWord == 1)
 		this->isEndOfWord = 0;
 }

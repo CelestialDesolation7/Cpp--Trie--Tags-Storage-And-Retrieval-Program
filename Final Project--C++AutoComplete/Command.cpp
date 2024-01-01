@@ -2,24 +2,24 @@
 #include "NodeAndTrie.h"
 
 
-static bool charEqual(char c1, char c2) {
+bool charEqual(char c1, char c2) {
 	return tolower(c1) == tolower(c2);
 }
 //大小写不敏感的字符相等判断
 
-bool operationEqual(string str1, string str2)
+bool operationEqual(string strIn, string expectedStr)
 {
-	if (str1.empty())return false;
+	if (strIn.empty())return false;
 	auto stringToLower = [](string& str) {
 		for (char& c : str) {c = tolower(c);}
 	};
-	stringToLower(str1);
-	stringToLower(str2);
-	if(str1==str2)
+	stringToLower(strIn);
+	stringToLower(expectedStr);
+	if(strIn==expectedStr)
 		return true;
-	commandTrie.layerSearch(str1,0,cmdSearchRes);
+	commandTrie.layerSearch(strIn,0,cmdSearchRes);
 	bool includeTarget = false;
-	includeTarget = (find(cmdSearchRes.begin(), cmdSearchRes.end(), str2) != cmdSearchRes.end());
+	includeTarget = (find(cmdSearchRes.begin(), cmdSearchRes.end(), expectedStr) != cmdSearchRes.end());
 	if (cmdSearchRes.size() >= 1 && includeTarget) {
 		cmdSearchRes.clear();
 		return true; }
@@ -176,6 +176,21 @@ void clearSpaceSuffix(string& str)
 }
 //清除空格后缀函数
 
+bool cmdMultiMatch(string expectedCmd,bool executive) {
+	string content;
+	if (operationEqual(cmdPassedIn,expectedCmd)) {
+		if (executive) {
+			auto cmd = stringToCmd(expectedCmd, content);
+			cmd->execute();
+			delete cmd;
+		}
+		cmdPassedIn.clear();
+		haveCmdPassedIn = false;
+		return true;
+	}
+	return false;
+}
+
 //////////////////////////////////////////////////////////////
 //指令实现函数////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////
@@ -298,8 +313,7 @@ void helpCmd::execute()
 		 << "其余指令均不需要在指令名称后输入内容,即使您输入了内容也不会产生作用.\n"
 		 << "您可以输入不完整的指令,如\"con\",程序会自动识别为confirm.但是需要注意\n"
 		 << "当输入前缀(如\"c\")与多个指令匹配时程序无法猜中您的意思,您需要重新输入\n"
-		 << "指令和您指定的内容之间以空格分割,一个就好,但是更多空格程序也能正常识别\n"
-		 << "该程序当前尚不支持您一次输入多个关键词,或通配符的使用.\n\n"
+		 << "指令和您指定的内容之间以空格分割,一个就好,但是更多空格程序也能正常识别\n\n"
 		 << "  在需要插入tag时,您可以选择性地给出对应的中文翻译.search,tag和中文之间\n"
 		 << "以空格分隔,例如\"add apple 苹果\".您的英文tag本身可以包含空格,程序能够\n"
 		 << "正确识别哪些是Tag哪些是中文翻译.您也可以不给出中文翻译.\n\n"
@@ -335,6 +349,12 @@ void selectCmd::execute()
 	if (selected <= resMaximumSeqNumber)
 	{
 		string selectedOne = searchResult[selected - 1];
+		for (auto str : favoriateList) {
+			if (str == selectedOne) {
+				cout << "您的收藏夹中已经存在 " << str << " 这个词,不能重复添加." << endl;
+				return;
+			}
+		}
 		favoriateList.push_back(selectedOne);
 		cout << "选择的词汇 " << selectedOne << " (" << showTrans(selectedOne) << ") "
 			 << "已被加入收藏夹.\n";
@@ -390,10 +410,9 @@ void quitCmd::execute()
 		if (!sendSubCommand("confirm")) {
 			askToQuit = true; return;
 		}
-		if (!sendSubCommand("save")) {
+		if (cmdMultiMatch("save")) {
 			askToQuit = true; return;
 		}
-		else return;
 }
 //退出函数已完成
 

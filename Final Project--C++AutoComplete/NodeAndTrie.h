@@ -70,7 +70,8 @@ public:
 	void markEnd();
 	//为了insert标记结尾节点而设计
 	void markNotEnd();
-	int childCount; //子节点数
+	int childCount; 
+	//子节点数
 	char readContent()const;
 };
 
