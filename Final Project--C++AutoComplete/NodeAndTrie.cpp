@@ -62,7 +62,6 @@ void trie::layerClassify(node* nodeIn)
 
 bool trie::remove(string deleted)
 {
-
 	vector<node*> tempSeed = baseSearch(deleted, &this->root);
 	//通过根搜索找到希望删除的词汇
 	if (tempSeed.size()!=1)
